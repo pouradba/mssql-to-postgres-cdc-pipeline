@@ -1,28 +1,28 @@
 -- ============================================
 -- Logical Replication Subscriber Setup
--- Run on: 10.200.32.71 (PostgreSQL Subscriber)
+-- Run on: PG_HOST (PostgreSQL Subscriber)
 -- ============================================
 
--- 1. Subscribe to MasterDB
-\c MasterDB
-CREATE SUBSCRIPTION sub_masterdb_ysecit_dev
-  CONNECTION 'host=10.200.30.30 port=5432 dbname=MasterDB user=devdbe password=CHANGE_ME'
-  PUBLICATION pub_masterdb
+-- 1. Subscribe to SourceDB_A
+\c SourceDB_A
+CREATE SUBSCRIPTION sub_SourceDB_A_ysecit_dev
+  CONNECTION 'host=PG_HOST port=5432 dbname=SourceDB_A user=devdbe password=CHANGE_ME'
+  PUBLICATION pub_SourceDB_A
   WITH (
     copy_data = true,
     create_slot = true,
-    slot_name = 'sub_masterdb_ysecit_dev'
+    slot_name = 'sub_SourceDB_A_ysecit_dev'
   );
 
--- 2. Subscribe to LoginDB
-\c LoginDB
-CREATE SUBSCRIPTION sub_logindb_ysecit_dev
-  CONNECTION 'host=10.200.30.30 port=5432 dbname=LoginDB user=devdbe password=CHANGE_ME'
-  PUBLICATION pub_logindb
+-- 2. Subscribe to SourceDB_B
+\c SourceDB_B
+CREATE SUBSCRIPTION sub_SourceDB_B_ysecit_dev
+  CONNECTION 'host=PG_HOST port=5432 dbname=SourceDB_B user=devdbe password=CHANGE_ME'
+  PUBLICATION pub_SourceDB_B
   WITH (
     copy_data = true,
     create_slot = true,
-    slot_name = 'sub_logindb_ysecit_dev'
+    slot_name = 'sub_SourceDB_B_ysecit_dev'
   );
 
 -- 3. Verify subscriptions

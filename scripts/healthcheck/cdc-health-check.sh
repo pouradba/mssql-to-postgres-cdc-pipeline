@@ -3,9 +3,9 @@
 # Run: ./cdc-health-check.sh
 # Cron: */10 * * * * /opt/cdc/scripts/healthcheck/cdc-health-check.sh
 
-CONNECT_URL="http://10.200.32.11:8083"
-PG_PUB="10.200.30.30"
-PG_SUB="10.200.32.71"
+CONNECT_URL="http://HOST:8083"
+PG_PUB="HOST"
+PG_SUB="HOST"
 SCORE=0
 MAX_SCORE=0
 
@@ -16,7 +16,7 @@ echo ""
 
 # 1. Check Kafka broker
 MAX_SCORE=$((MAX_SCORE + 10))
-if curl -sf http://10.200.32.11:9092 > /dev/null 2>&1 || docker exec kafka-kraft kafka-broker-api-versions.sh --bootstrap-server localhost:9092 > /dev/null 2>&1; then
+if curl -sf http://HOST:9092 > /dev/null 2>&1 || docker exec kafka-kraft kafka-broker-api-versions.sh --bootstrap-server localhost:9092 > /dev/null 2>&1; then
   echo "[OK] Kafka broker: RUNNING"
   SCORE=$((SCORE + 10))
 else
@@ -34,7 +34,7 @@ else
 fi
 
 # 3. Check each connector
-for CONNECTOR in masterdb-source-v2 logindb-source-v2 postgres-masterdb-sink postgres-logindb-sink; do
+for CONNECTOR in SourceDB_A-source-v2 SourceDB_B-source-v2 postgres-SourceDB_A-sink postgres-SourceDB_B-sink; do
   MAX_SCORE=$((MAX_SCORE + 10))
   STATUS=$(curl -sf "${CONNECT_URL}/connectors/${CONNECTOR}/status" 2>/dev/null)
   if [ $? -eq 0 ]; then

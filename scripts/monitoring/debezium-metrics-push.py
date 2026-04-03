@@ -14,8 +14,8 @@ PUSHGATEWAY_URL = "http://10.200.30.44:9091"
 JOB_NAME = "debezium_cdc"
 
 CONNECTORS = [
-    {"name": "masterdb-source-v2", "type": "source", "server": "masterdb"},
-    {"name": "logindb-source-v2", "type": "source", "server": "logindb"},
+    {"name": "SourceDB_A-source-v2", "type": "source", "server": "SourceDB_A"},
+    {"name": "SourceDB_B-source-v2", "type": "source", "server": "SourceDB_B"},
 ]
 
 def get_jolokia_metric(connector_name, mbean_type="streaming"):

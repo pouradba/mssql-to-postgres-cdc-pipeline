@@ -1,11 +1,11 @@
 {
-  "name": "postgres-logindb-sink",
+  "name": "postgres-SourceDB_B-sink",
   "config": {
     "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
-    "connection.url": "jdbc:postgresql://10.200.30.30:5432/LoginDB",
+    "connection.url": "jdbc:postgresql://PG_HOST:5432/SourceDB_B",
     "connection.user": "devdb",
     "connection.password": "${PG_SINK_PASSWORD}",
-    "topics.regex": "logindb-source-v2\\.LoginDB\\..*",
+    "topics.regex": "SourceDB_B-source-v2\\.SourceDB_B\\..*",
     "insert.mode": "upsert",
     "delete.enabled": "true",
     "pk.mode": "record_key",
@@ -17,7 +17,7 @@
     "transforms.unwrap.drop.tombstones": "false",
     "transforms.unwrap.delete.handling.mode": "rewrite",
     "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
-    "transforms.route.regex": "logindb-source-v2\\.LoginDB\\.(.+)\\.(.+)",
+    "transforms.route.regex": "SourceDB_B-source-v2\\.SourceDB_B\\.(.+)\\.(.+)",
     "transforms.route.replacement": "$2",
     "errors.tolerance": "all",
     "errors.log.enable": "true",
