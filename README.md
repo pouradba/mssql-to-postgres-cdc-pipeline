@@ -158,6 +158,6 @@ If connectors show RUNNING but data stops flowing, check TCP keepalive. This was
 5. **Monitor Jolokia MBeans** for real Debezium lag - Kafka consumer lag alone is insufficient
 6. **Never test INSERT/DELETE** on tables with active publication subscribers
 ## Author
-**PouraDBA** (Vijayakumar Poura) - Database Reliability Engineer | [AMVANA](https://github.com/pouradba)
+**PouraDBA** (Vijayakumar Poura) - Database Reliability Engineer | AMVANA Software India Pvt. Ltd. 
 ## License
 MIT
