@@ -1,0 +1,20 @@
+# Sensitive — NEVER commit
+*.password
+*.secret
+.env
+.env.*
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Docker volumes
+data/

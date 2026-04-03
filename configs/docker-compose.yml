@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  kafka:
+    image: apache/kafka:3.7.0
+    container_name: kafka-kraft
+    hostname: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://10.200.32.11:9092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+    restart: unless-stopped
+
+  debezium-connect:
+    image: debezium/connect:2.5
+    container_name: debezium-connect
+    hostname: debezium
+    ports:
+      - "8083:8083"
+      - "8778:8778"
+    environment:
+      BOOTSTRAP_SERVERS: kafka:9092
+      GROUP_ID: cdc-connect-cluster
+      CONFIG_STORAGE_TOPIC: connect-configs
+      OFFSET_STORAGE_TOPIC: connect-offsets
+      STATUS_STORAGE_TOPIC: connect-status
+      CONFIG_STORAGE_REPLICATION_FACTOR: 1
+      OFFSET_STORAGE_REPLICATION_FACTOR: 1
+      STATUS_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      KAFKA_OPTS: "-javaagent:/kafka/connect/jolokia-jvm-agent.jar=port=8778,host=0.0.0.0"
+      JAVA_TOOL_OPTIONS: "-Xmx1G -Xms512M"
+    volumes:
+      - connect-plugins:/kafka/connect
+    depends_on:
+      - kafka
+    restart: unless-stopped
+
+volumes:
+  kafka-data:
+  connect-plugins:

@@ -1,0 +1,28 @@
+{
+  "name": "masterdb-source-v2",
+  "config": {
+    "connector.class": "io.debezium.connector.sqlserver.SqlServerConnector",
+    "database.hostname": "10.200.30.30",
+    "database.port": "1433",
+    "database.user": "cdcuser",
+    "database.password": "${MSSQL_CDC_PASSWORD}",
+    "database.names": "MasterDB",
+    "topic.prefix": "masterdb-source-v2",
+    "schema.history.internal.kafka.bootstrap.servers": "10.200.32.11:9092",
+    "schema.history.internal.kafka.topic": "schema-changes.masterdb",
+    "snapshot.mode": "recovery",
+    "table.include.list": "dbo.Details,dbo.VendorTypes,dbo.FormDetails,Vendor.Details,Vendor.VendorTypes,Master.FormDetails,Company.Details,Company.Hierachy,Company.Products,Contacts.Address,Contacts.AddressType,Contacts.Details,Employee.Details,Product.Details,Security.ObjectStages,Security.UserObjects,Security.WorkFlow",
+    "decimal.handling.mode": "double",
+    "time.precision.mode": "connect",
+    "tombstones.on.delete": "true",
+    "provide.transaction.metadata": "false",
+    "database.encrypt": "false",
+    "database.trustServerCertificate": "true",
+    "errors.tolerance": "all",
+    "errors.log.enable": "true",
+    "errors.deadletterqueue.topic.name": "dlq-masterdb",
+    "errors.deadletterqueue.context.headers.enable": "true",
+    "heartbeat.interval.ms": "30000",
+    "signal.data.collection": "dbo.debezium_signal"
+  }
+}

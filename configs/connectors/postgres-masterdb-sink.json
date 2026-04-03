@@ -1,0 +1,29 @@
+{
+  "name": "postgres-masterdb-sink",
+  "config": {
+    "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
+    "connection.url": "jdbc:postgresql://10.200.30.30:5432/MasterDB",
+    "connection.user": "devdb",
+    "connection.password": "${PG_SINK_PASSWORD}",
+    "topics.regex": "masterdb-source-v2\\.MasterDB\\..*",
+    "insert.mode": "upsert",
+    "delete.enabled": "true",
+    "pk.mode": "record_key",
+    "pk.fields": "Id",
+    "auto.create": "false",
+    "auto.evolve": "false",
+    "table.name.format": "${topic}",
+    "transforms": "unwrap,route",
+    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+    "transforms.unwrap.drop.tombstones": "false",
+    "transforms.unwrap.delete.handling.mode": "rewrite",
+    "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
+    "transforms.route.regex": "masterdb-source-v2\\.MasterDB\\.(.+)\\.(.+)",
+    "transforms.route.replacement": "$2",
+    "errors.tolerance": "all",
+    "errors.log.enable": "true",
+    "errors.deadletterqueue.topic.name": "dlq-pg-masterdb-sink",
+    "batch.size": "1000",
+    "consumer.override.max.poll.records": "500"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "postgres-logindb-sink",
+  "config": {
+    "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
+    "connection.url": "jdbc:postgresql://10.200.30.30:5432/LoginDB",
+    "connection.user": "devdb",
+    "connection.password": "${PG_SINK_PASSWORD}",
+    "topics.regex": "logindb-source-v2\\.LoginDB\\..*",
+    "insert.mode": "upsert",
+    "delete.enabled": "true",
+    "pk.mode": "record_key",
+    "pk.fields": "Id",
+    "auto.create": "false",
+    "auto.evolve": "false",
+    "transforms": "unwrap,route",
+    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+    "transforms.unwrap.drop.tombstones": "false",
+    "transforms.unwrap.delete.handling.mode": "rewrite",
+    "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
+    "transforms.route.regex": "logindb-source-v2\\.LoginDB\\.(.+)\\.(.+)",
+    "transforms.route.replacement": "$2",
+    "errors.tolerance": "all",
+    "errors.log.enable": "true",
+    "batch.size": "1000"
+  }
+}
